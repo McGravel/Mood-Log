@@ -21,12 +21,13 @@ namespace MoodLog
                 File.Create(fileName);
             }
             
-            Console.WriteLine("What's your mood, in a rating from 0(Lowest) to 9(Highest)?");
+            Console.Write("Rate your mood from 0 being the lowest and 9 the highest: ");
             var currentMood = new Mood()
             {
                 CurrentDate = DateTime.Now.ToShortDateString(),
                 CurrentTime = DateTime.Now.ToShortTimeString(),
-                CurrentRating = HelperMethods.GetNumberOnly()
+                CurrentRating = HelperMethods.GetNumberOnly(),
+                OptionalComment = HelperMethods.GetComment()
             };
             
             var jsonTest = JsonSerializer.Serialize(currentMood);
@@ -42,14 +43,15 @@ namespace MoodLog
                 
                 while (!readFile.EndOfStream)
                 {
-                    var deserializeTest = JsonSerializer.Deserialize<Mood>(readFile.ReadLine() ?? throw new InvalidOperationException());
+                    var mood = JsonSerializer.Deserialize<Mood>(readFile.ReadLine() ?? throw new InvalidOperationException());
 
-                    if (lastDate != deserializeTest.CurrentDate)
+                    if (lastDate != mood.CurrentDate)
                     {
-                        Console.Write($"{deserializeTest.CurrentDate}\n");
-                        lastDate = deserializeTest.CurrentDate;
+                        Console.Write($"{mood.CurrentDate}\n");
+                        lastDate = mood.CurrentDate;
                     }
-                    Console.WriteLine($"\t{deserializeTest.CurrentTime} | {deserializeTest.CurrentRating}");
+                    
+                    Console.WriteLine($"\t{mood.CurrentTime} | {mood.CurrentRating} | {mood.OptionalComment}");
                 }
             }
         }

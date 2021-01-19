@@ -8,7 +8,8 @@ namespace MoodLog
         public string CurrentDate { get; set; }
         public string CurrentTime { get; set; }
         public string CurrentRating { get; set; }
-        
+        public string OptionalComment { get; set; }
+
         public Mood()
         {
             
