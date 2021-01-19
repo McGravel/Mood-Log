@@ -7,33 +7,6 @@ namespace MoodLog
 {
     internal static class Program
     {
-        private static string GetComment()
-        {
-            Console.WriteLine("Any comment regarding your current mood? (Press Enter to skip)");
-            var comment = Console.ReadLine();
-            Debug.Assert(comment != null, nameof(comment) + " != null");
-            return comment;
-        }
-        
-        private static bool IsNumber(string inputKey)
-        {
-            return int.TryParse(inputKey, out _);
-        }
-
-        private static string GetNumberOnly()
-        {
-            string key = default;
-            while (!IsNumber(key))
-            {
-                key = Console.ReadKey().KeyChar.ToString();
-                Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
-            }
-            
-            Console.WriteLine();
-            
-            return key;
-        }
-        
         private static void Main(string[] args)
         {
             Console.WriteLine($"Location: {Environment.CurrentDirectory}");
@@ -71,7 +44,7 @@ namespace MoodLog
                 
                 while (!readFile.EndOfStream)
                 {
-                    var mood = JsonSerializer.Deserialize<Mood>(readFile.ReadLine() ?? throw new InvalidOperationException());
+                    var mood = JsonSerializer.Deserialize<Mood>(readFile.ReadLine());
 
                     if (lastDate != mood.CurrentDate)
                     {
@@ -82,6 +55,33 @@ namespace MoodLog
                     Console.WriteLine($"\t{mood.CurrentTime} | {mood.CurrentRating} | {mood.OptionalComment}");
                 }
             }
+        }
+        
+        private static string GetComment()
+        {
+            Console.WriteLine("Any comment regarding your current mood? (Press Enter to skip)");
+            var comment = Console.ReadLine();
+            Debug.Assert(comment != null, nameof(comment) + " != null");
+            return comment;
+        }
+        
+        private static bool IsNumber(string inputKey)
+        {
+            return int.TryParse(inputKey, out _);
+        }
+
+        private static string GetNumberOnly()
+        {
+            string key = default;
+            while (!IsNumber(key))
+            {
+                key = Console.ReadKey().KeyChar.ToString();
+                Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
+            }
+            
+            Console.WriteLine();
+            
+            return key;
         }
     }
 }
