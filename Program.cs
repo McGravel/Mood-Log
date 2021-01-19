@@ -37,6 +37,7 @@ namespace MoodLog
             using (var readFile = new StreamReader(fileName))
             {
                 string lastDate = default;
+                var lastRating = -1;
                 
                 while (!readFile.EndOfStream)
                 {
@@ -44,21 +45,44 @@ namespace MoodLog
 
                     if (lastDate != mood.CurrentDate)
                     {
-                        Console.Write($"{mood.CurrentDate}\n");
+                        Console.Write($"\n{mood.CurrentDate}\n");
                         lastDate = mood.CurrentDate;
                     }
+
+                    var castRating = int.Parse(mood.CurrentRating);
                     
-                    Console.WriteLine($"\t{mood.CurrentTime} | {mood.CurrentRating} | {mood.OptionalComment}");
+                    Console.WriteLine($"\t{mood.CurrentTime} | {mood.CurrentRating} {RatingDifference(lastRating, castRating)} | {mood.OptionalComment}");
+                    
+                    lastRating = castRating;
                 }
             }
 
             Console.Write("Press a key to exit... ");
             Console.ReadKey();
         }
+
+        private static string RatingDifference(int lastRating, int newRating)
+        {
+            if (lastRating == newRating || lastRating < 0)
+            {
+                return "    ";
+            }
+            
+            var difference = Math.Abs(lastRating - newRating);
+
+            if (lastRating > newRating)
+            {
+                return "(-" + difference + ")";
+            }
+            else
+            {
+                return "(+" + difference + ")";
+            }
+        }
         
         private static string GetComment()
         {
-            Console.WriteLine("Any comment regarding your current mood? (Press Enter to skip)");
+            Console.WriteLine("Any comment regarding your current mood? (Press Enter to skip)\n");
             var comment = Console.ReadLine();
             Debug.Assert(comment != null, nameof(comment) + " != null");
             return comment;
