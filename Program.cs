@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 
 namespace MoodLog
 {
@@ -6,10 +7,10 @@ namespace MoodLog
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine($"Current Date for entries: {DateTime.Now.Date.ToShortDateString()}");
             Console.WriteLine("What's your mood, in a rating from 0(Lowest) to 9(Highest)?");
-            var mood = new Mood();
-            Console.WriteLine($"\n{mood.CurrentDate} @ {mood.CurrentTime}: {mood.CurrentRating}");
+            var currentMood = new Mood();
+            Console.WriteLine($"\n{currentMood.CurrentDate} @ {currentMood.CurrentTime}: {currentMood.CurrentRating}");
+            var jsonTest = JsonSerializer.Serialize(currentMood);
         }
     }
 }
