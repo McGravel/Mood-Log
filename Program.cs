@@ -51,6 +51,9 @@ namespace MoodLog
                     Console.WriteLine($"\t{mood.CurrentTime} | {mood.CurrentRating} | {mood.OptionalComment}");
                 }
             }
+
+            Console.Write("Press a key to exit... ");
+            Console.ReadKey();
         }
         
         private static string GetComment()
