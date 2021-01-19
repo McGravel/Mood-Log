@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 
@@ -6,6 +7,33 @@ namespace MoodLog
 {
     internal static class Program
     {
+        private static string GetComment()
+        {
+            Console.WriteLine("Any comment regarding your current mood? (Press Enter to skip)");
+            var comment = Console.ReadLine();
+            Debug.Assert(comment != null, nameof(comment) + " != null");
+            return comment;
+        }
+        
+        private static bool IsNumber(string inputKey)
+        {
+            return int.TryParse(inputKey, out _);
+        }
+
+        private static string GetNumberOnly()
+        {
+            string key = default;
+            while (!IsNumber(key))
+            {
+                key = Console.ReadKey().KeyChar.ToString();
+                Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
+            }
+            
+            Console.WriteLine();
+            
+            return key;
+        }
+        
         private static void Main(string[] args)
         {
             Console.WriteLine($"Location: {Environment.CurrentDirectory}");
@@ -26,8 +54,8 @@ namespace MoodLog
             {
                 CurrentDate = DateTime.Now.ToShortDateString(),
                 CurrentTime = DateTime.Now.ToShortTimeString(),
-                CurrentRating = HelperMethods.GetNumberOnly(),
-                OptionalComment = HelperMethods.GetComment()
+                CurrentRating = GetNumberOnly(),
+                OptionalComment = GetComment()
             };
             
             var jsonTest = JsonSerializer.Serialize(currentMood);
