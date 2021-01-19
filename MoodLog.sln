@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoodLog", "MoodLog.csproj", "{F19F3079-4B30-465C-BA17-B0FB1FC66BFC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F19F3079-4B30-465C-BA17-B0FB1FC66BFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F19F3079-4B30-465C-BA17-B0FB1FC66BFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F19F3079-4B30-465C-BA17-B0FB1FC66BFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F19F3079-4B30-465C-BA17-B0FB1FC66BFC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
