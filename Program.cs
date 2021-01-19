@@ -75,7 +75,15 @@ namespace MoodLog
             while (!IsNumber(key))
             {
                 key = Console.ReadKey().KeyChar.ToString();
-                Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
+                if (Console.GetCursorPosition().Left - 1 > 0)
+                {
+                    Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
+                }
+                else
+                {
+                    // 
+                    Console.SetCursorPosition(Console.GetCursorPosition().Left + 58, Console.GetCursorPosition().Top);
+                }
             }
             
             Console.WriteLine();
