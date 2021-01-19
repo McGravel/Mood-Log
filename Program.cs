@@ -12,16 +12,12 @@ namespace MoodLog
             Console.WriteLine($"Location: {Environment.CurrentDirectory}");
             var fileName = Environment.CurrentDirectory + @"\mood.json";
             
-            if (File.Exists(fileName))
+            if (!File.Exists(fileName))
             {
-                Console.WriteLine("File Exists!");
-            }
-            else
-            {
-                Console.WriteLine("File non-existent");
+                Console.WriteLine("File non-existent, creating new one.");
                 File.Create(fileName);
             }
-            
+
             Console.Write("Rate your mood from 0 being the lowest and 9 the highest: ");
             var currentMood = new Mood()
             {
