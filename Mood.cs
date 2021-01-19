@@ -1,19 +1,31 @@
 ﻿using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace MoodLog
 {
+    [Serializable]
     public class Mood
     {
-        public string CurrentDate { get; }
-        public string CurrentTime { get; }
-        public string CurrentRating { get; }
-
-        public Mood()
+        public Mood(bool manual = false)
         {
             CurrentDate = DateTime.Now.ToShortDateString();
             CurrentTime = DateTime.Now.ToShortTimeString();
-            CurrentRating = GetNumberOnly();
+            if (manual)
+            {
+                CurrentRating = GetNumberOnly();
+            }
         }
+
+        [JsonConstructor]
+        public Mood()
+        {
+            
+        }
+
+        public string CurrentDate { get; set; }
+        public string CurrentTime { get; set; }
+        public string CurrentRating { get; set; }
 
         private static bool IsNumber(ConsoleKey inputKey)
         {
