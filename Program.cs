@@ -9,11 +9,12 @@ namespace MoodLog
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine($"Location: {Environment.CurrentDirectory}");
+            // TODO: Split these files into monthly files perhaps? i.e. "02_2021.json" or something.
             var fileName = Environment.CurrentDirectory + @"\mood.json";
             
             if (!File.Exists(fileName))
             {
+                Console.WriteLine($"Tried to open {fileName} - Not found.");
                 Console.WriteLine("File non-existent, creating new one.");
                 File.Create(fileName);
             }
@@ -38,11 +39,23 @@ namespace MoodLog
             {
                 string lastDate = default;
                 var lastRating = -1;
-                
+
+                Console.WriteLine("{0}",new string('=', 40));
+                Console.WriteLine("Here's your log from the past day or so:");
+                Console.WriteLine("{0}",new string('=', 40));
+
                 while (!readFile.EndOfStream)
                 {
                     var mood = JsonSerializer.Deserialize<Mood>(readFile.ReadLine());
 
+                    var parsedDate = DateTime.Parse(mood.CurrentDate);
+
+                    if (parsedDate <= DateTime.Today.AddDays(-2))
+                    {
+                        continue;
+                    }
+                    
+                    // Perhaps this logic can be reworked now I am aware of DateTime.Parse()
                     if (lastDate != mood.CurrentDate)
                     {
                         Console.Write($"\n{mood.CurrentDate}\n");
@@ -61,6 +74,7 @@ namespace MoodLog
             Console.ReadKey();
         }
 
+        // TODO: Perhaps better formatting than this.
         private static string RatingDifference(int lastRating, int newRating)
         {
             if (lastRating == newRating || lastRating < 0)
@@ -99,19 +113,23 @@ namespace MoodLog
             while (!IsNumber(key))
             {
                 key = Console.ReadKey().KeyChar.ToString();
+                // Sorta hacky code to keep the cursor/caret in place whilst receiving input.
                 if (Console.GetCursorPosition().Left - 1 > 0)
                 {
+                    // Manually move the cursor/caret back left each time an invalid char is entered.
                     Console.SetCursorPosition(Console.GetCursorPosition().Left - 1, Console.GetCursorPosition().Top);
                 }
                 else
                 {
-                    // 
+                    // The 58 is just basically the length of the text printed to the screen.
+                    // So the cursor just gets nudged back to where it was before
+                    // if a non-number is entered with the enter key.
+                    // A bit of a hack, but it does what I want it to.
                     Console.SetCursorPosition(Console.GetCursorPosition().Left + 58, Console.GetCursorPosition().Top);
                 }
             }
             
             Console.WriteLine();
-            
             return key;
         }
     }
