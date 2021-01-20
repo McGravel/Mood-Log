@@ -64,7 +64,7 @@ namespace MoodLog
 
                     var castRating = int.Parse(mood.CurrentRating);
                     
-                    Console.WriteLine($"\t{mood.CurrentTime} | {mood.CurrentRating} {RatingDifference(lastRating, castRating)} | {mood.OptionalComment}");
+                    Console.WriteLine($"  {mood.CurrentTime}: {mood.CurrentRating} {RatingDifference(lastRating, castRating)} {mood.OptionalComment}");
                     
                     lastRating = castRating;
                 }
