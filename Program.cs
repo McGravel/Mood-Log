@@ -30,11 +30,11 @@ namespace MoodLog
                 OptionalComment = GetComment()
             };
             
-            var jsonTest = JsonSerializer.Serialize(currentMood);
+            var serialize = JsonSerializer.Serialize(currentMood);
             
             using (var file = new StreamWriter(fileName, true))
             {
-                file.WriteLine(jsonTest);
+                file.WriteLine(serialize);
             }
             
             Console.WriteLine("{0}",new string('=', 40));
