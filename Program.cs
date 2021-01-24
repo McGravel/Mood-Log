@@ -10,7 +10,7 @@ namespace MoodLog
         private static void Main(string[] args)
         {
             // TODO: Split these files into monthly files perhaps? i.e. "02_2021.json" or something.
-            var fileName = Environment.CurrentDirectory + @"\mood.json";
+            var fileName = AppDomain.CurrentDomain.BaseDirectory + @"\mood.json";
             
             if (!File.Exists(fileName))
             {
