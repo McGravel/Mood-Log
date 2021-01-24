@@ -36,44 +36,91 @@ namespace MoodLog
             {
                 file.WriteLine(jsonTest);
             }
-
+            
+            Console.WriteLine("{0}",new string('=', 40));
+            Console.WriteLine("Here's your log from the past day or so:");
+            Console.WriteLine("{0}",new string('=', 40));
+            
             using (var readFile = new StreamReader(fileName))
             {
-                string lastDate = default;
-                var lastRating = -1;
-
-                Console.WriteLine("{0}",new string('=', 40));
-                Console.WriteLine("Here's your log from the past day or so:");
-                Console.WriteLine("{0}",new string('=', 40));
-
-                while (!readFile.EndOfStream)
-                {
-                    var mood = JsonSerializer.Deserialize<Mood>(readFile.ReadLine());
-
-                    var parsedDate = DateTime.Parse(mood.CurrentDate);
-
-                    if (parsedDate <= DateTime.Today.AddDays(-2))
-                    {
-                        continue;
-                    }
-                    
-                    // Perhaps this logic can be reworked now I am aware of DateTime.Parse()
-                    if (lastDate != mood.CurrentDate)
-                    {
-                        Console.Write($"\n{mood.CurrentDate}\n");
-                        lastDate = mood.CurrentDate;
-                    }
-
-                    var castRating = int.Parse(mood.CurrentRating);
-                    
-                    Console.WriteLine($"  {mood.CurrentTime}: {mood.CurrentRating} {RatingDifference(lastRating, castRating)} {mood.OptionalComment}");
-                    
-                    lastRating = castRating;
-                }
+                ParseFile(readFile);
             }
 
             Console.Write("Press a key to exit... ");
             Console.ReadKey();
+        }
+
+        private static void ParseFile(StreamReader readFile)
+        {
+            string lastDate = default;
+            var lastRating = -1;
+
+            // Tried default, but it doesn't quite work, so leaving these as literals for now.
+            var worstRating = 10;
+            var bestRating = -1;
+
+            // Couple of local functions to workaround how this using block works at the moment...
+            static void PrintBestAndWorst(int worst, int best)
+            {
+                Console.WriteLine($"Your lowest rating for this day is {worst}.\nThe best is {best}.");
+                Console.WriteLine($"That's a range of {Math.Abs(worst - best)} over the course of the day.");
+                //TODO: Evaluate range and comment if it is consistent or varied in extra message
+            }
+
+            void ResetBestAndWorst()
+            {
+                worstRating = 10;
+                bestRating = -1;
+            }
+
+            while (!readFile.EndOfStream)
+            {
+                var mood = JsonSerializer.Deserialize<Mood>(readFile.ReadLine());
+
+                var parsedDate = DateTime.Parse(mood.CurrentDate);
+
+                if (parsedDate <= DateTime.Today.AddDays(-2))
+                {
+                    continue;
+                }
+
+                // Perhaps this logic can be reworked now I am aware of DateTime.Parse()
+                if (lastDate != mood.CurrentDate)
+                {
+                    if (lastDate != default)
+                    {
+                        PrintBestAndWorst(worstRating, bestRating);
+                    }
+
+                    Console.Write($"\n{mood.CurrentDate}\n");
+                    lastDate = mood.CurrentDate;
+
+                    // Maybe there's a better way of resetting these instead. Is a local function overkill?
+                    ResetBestAndWorst();
+                }
+
+                var castRating = int.Parse(mood.CurrentRating);
+
+                if (castRating > bestRating)
+                {
+                    bestRating = castRating;
+                }
+
+                if (castRating < worstRating)
+                {
+                    worstRating = castRating;
+                }
+
+                Console.WriteLine(
+                    $"  {mood.CurrentTime}: {mood.CurrentRating} {RatingDifference(lastRating, castRating)} {mood.OptionalComment}");
+
+                lastRating = castRating;
+            }
+
+            // Made a local function to make this workaround slightly less ugly,
+            // but the logic shouldn't require this re-printing of best and worst I don't think.
+            // Either way, it DOES work as intended...
+            PrintBestAndWorst(worstRating, bestRating);
         }
 
         // TODO: Perhaps better formatting than this.
