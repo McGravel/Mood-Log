@@ -9,7 +9,7 @@ namespace MoodLog
     {
         private static void Main(string[] args)
         {
-            var fileName = AppDomain.CurrentDomain.BaseDirectory +  DateTime.Today.ToString("MMM") + "_" + DateTime.Today.Year + @".json";
+            var fileName = AppDomain.CurrentDomain.BaseDirectory + DateTime.Today.ToString("MMM") + "_" + DateTime.Today.Year + ".json";
             
             if (!File.Exists(fileName))
             {
@@ -55,24 +55,26 @@ namespace MoodLog
             string lastDate = default;
             var lastRating = -1;
 
-            // Tried default, but it doesn't quite work, so leaving these as literals for now.
-            var worstRating = 10;
-            var bestRating = -1;
+            int worstRating;
+            int bestRating;
+            
+            // Might as well use this function here too instead of repeating code?
+            ResetBestAndWorst();
 
             // Couple of local functions to workaround how this using block works at the moment...
-            static void PrintBestAndWorst(int worst, int best)
-            {
-                Console.WriteLine($"Your lowest rating for this day is {worst}.\nThe best is {best}.");
-                Console.WriteLine($"That's a range of {Math.Abs(worst - best)} over the course of the day.");
-                //TODO: Evaluate range and comment if it is consistent or varied in extra message
-            }
-
             void ResetBestAndWorst()
             {
                 worstRating = 10;
                 bestRating = -1;
             }
-
+            
+            static void PrintBestAndWorst(int worst, int best)
+            {
+                Console.WriteLine($"\nYour lowest rating for this day is {worst}.\nThe best is {best}.");
+                Console.WriteLine($"That's a range of {Math.Abs(worst - best)} over the course of the day.");
+                //TODO: Evaluate range and comment if it is consistent or varied in extra message
+            }
+            
             while (!readFile.EndOfStream)
             {
                 var mood = JsonSerializer.Deserialize<Mood>(readFile.ReadLine());
