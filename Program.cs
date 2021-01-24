@@ -16,7 +16,10 @@ namespace MoodLog
             {
                 Console.WriteLine($"Tried to open {fileName} - Not found.");
                 Console.WriteLine("File non-existent, creating new one.");
-                File.Create(fileName);
+                using (File.Create(fileName))
+                {
+                    Console.WriteLine("File created.");
+                }
             }
 
             Console.Write("Rate your mood from 0 being the lowest and 9 the highest: ");
