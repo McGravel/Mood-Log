@@ -70,9 +70,22 @@ namespace MoodLog
             
             static void PrintBestAndWorst(int worst, int best)
             {
-                Console.WriteLine($"\nYour lowest rating for this day is {worst}.\nThe best is {best}.");
-                Console.WriteLine($"That's a range of {Math.Abs(worst - best)} over the course of the day.");
-                //TODO: Evaluate range and comment if it is consistent or varied in extra message
+                var ratingDifference = Math.Abs(worst - best);
+                Console.WriteLine($"\nYour rating for this day was {worst} at its worst and {best} at its best.");
+                Console.WriteLine($"That's a range of {ratingDifference} over the course of the day.");
+                
+                if (ratingDifference > 5)
+                {
+                    Console.WriteLine("Your mood varied a lot.");
+                }
+                else if (ratingDifference > 3)
+                {
+                    Console.WriteLine("Your mood moved around a fair bit.");
+                }
+                else
+                {
+                    Console.WriteLine("Your mood was consistent.");
+                }
             }
             
             while (!readFile.EndOfStream)
