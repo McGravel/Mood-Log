@@ -9,18 +9,6 @@ namespace MoodLog
     {
         private static void Main(string[] args)
         {
-            var fileName = AppDomain.CurrentDomain.BaseDirectory + DateTime.Today.ToString("MMM") + "_" + DateTime.Today.Year + ".json";
-            
-            if (!File.Exists(fileName))
-            {
-                Console.WriteLine($"Tried to open {fileName} - Not found.");
-                Console.WriteLine("File non-existent, creating new one.");
-                using (File.Create(fileName))
-                {
-                    Console.WriteLine("File created.");
-                }
-            }
-
             Console.Write("Rate your mood from 0 being the lowest and 9 the highest: ");
             var currentMood = new Mood()
             {
@@ -31,6 +19,13 @@ namespace MoodLog
             };
             
             var serialize = JsonSerializer.Serialize(currentMood);
+            
+            var fileName = AppDomain.CurrentDomain.BaseDirectory + DateTime.Today.ToString("MMM") + "_" + DateTime.Today.Year + ".json";
+            
+            if (!File.Exists(fileName))
+            {
+                Console.WriteLine($"Tried to open {fileName} - Not found. It will now be created.");
+            }
             
             using (var file = new StreamWriter(fileName, true))
             {
