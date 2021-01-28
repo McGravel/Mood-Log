@@ -69,11 +69,11 @@ namespace MoodLog
                 Console.WriteLine($"\nYour rating for this day was {worst} at its worst and {best} at its best.");
                 Console.WriteLine($"That's a range of {ratingDifference} over the course of the day.");
                 
-                if (ratingDifference > 5)
+                if (ratingDifference > 4)
                 {
                     Console.WriteLine("Your mood varied a lot.");
                 }
-                else if (ratingDifference > 3)
+                else if (ratingDifference > 2)
                 {
                     Console.WriteLine("Your mood moved around a fair bit.");
                 }
